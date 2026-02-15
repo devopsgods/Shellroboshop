@@ -49,8 +49,8 @@ do
             "ResourceRecordSet": {
                 "Name": "'$recordname'",
                 "Type": "A",
-                "TTL": ,
-                "ResourceRecords": [
+                "TTL": 1,
+                   "ResourceRecords": [
                 {
                     "Value": "'172.31.22.151'"
                 }
