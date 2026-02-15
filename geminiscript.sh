@@ -37,29 +37,29 @@ do
     fi
      
     echo "IP Address for $i: $IP"
-
+#update route53
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
-    --change-batch '
+    --change-batch "
         {
         "Comment": "Updating the A record for my EC2 instance",
         "Changes": [
             {
-            "Action": "UPSERT",
-            "ResourceRecordSet": {
-                "Name": "'$recordname'",
-                "Type": "A",
-                "TTL": 1,
-                   "ResourceRecords": [
-                {
-                    "Value": "'172.31.22.151'"
+                    "Action": "UPSERT",
+                    "ResourceRecordSet": {
+                    "Name": ""$recordname"",
+                    "Type": "A",
+                    "TTL": 1,
+                    "ResourceRecords": [
+                    {
+                        "Value": "'172.31.22.151'"
+                    }
+                    ]
                 }
-                ]
+                }
+            ]
             }
-            }
-        ]
-        }
 
-        '
+        "
         echo "" record iupdated for $i
 done
