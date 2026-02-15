@@ -5,7 +5,7 @@ AMI_ID="ami-0220d79f3f480ecf5"
 
 for instance in $@
 do
-    INSTANCE_ID = $( 
+    INSTANCE_ID=$( 
         aws ec2 run-instances \
         --image-id $AMI_ID \
         --security-group-ids $SG_ID \
@@ -21,7 +21,8 @@ do
                 --query 'Reservations[0].Instance[].PublicIpAddress' \
                 --output text
 )
-else (
+else 
+IP=$(
         aws ec2 describe-instances \
          --instance-ids $INSTANCE_ID \
          --query 'Reservations[0].Instance[].PrivateIpAddress' \
