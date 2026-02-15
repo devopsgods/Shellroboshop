@@ -11,7 +11,7 @@ do
         --security-group-ids $SG_ID \
         --instance-type "t3.micro" \
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE}]" \
-        --query 'Reservation[0]InstancesId' \
+        --query 'Instance[0]InstancesId' \
         --output text
 
         if[$instance == "frontend"];
