@@ -1,32 +1,34 @@
 #!/bin/bash
 
 USERID=$(id -u)
-LOG_FOLDER="/var/log/Shellroboshop"
-LOG_FILES="$LOG_FOLDER/0.log"
+TIMESTAMP=$(date +%F-%H-%M-%S)
+LOGS_FILE="/tmp/$0-$TIMESTAMP.log"
+LOGS_FOLDER="/var/log/Shellroboshop"
+LOGS_FILES="$LOG_FOLDER/0.log"
 
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-if [$USER_ID -ne 0]; then
+if [ $USER_ID -ne 0 ]; then
     echo -e "$R run with root user access $N" | tee -a $LOG_FILES
     exit 1
 fi
 
 mkdir -p $LOG_FOLDER
 
-validate(){
-    if [$1 -ne 0]; then
-        echo -e "$R ...... $N failed" | tee -a $LOG_FILES
+VALIDATE(){
+    if [ $1 -ne 0 ]; then
+        echo -e "$2...... $N failed" | tee -a $LOG_FILES
         exit 1
         else
-        echo -e "$R .......$N" GREAT SUCCESS| tee -a $LOG_FILES
+        echo -e "$2 .......$N" GREAT SUCCESS| tee -a $LOG_FILES
     fi
 }
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo
-validate $? "copying mongo repo"
+VALIDATE $? "copying mongo repo"
 
 dnf install mongodb-org -y &>>$LOGS_FILE
 VALIDATE $? "Installing MongoDB server"
