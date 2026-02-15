@@ -47,8 +47,8 @@ do
             {
                     "Action": "UPSERT",
                     "ResourceRecordSet": {
-                    "Name": ""$recordname"",
-                    "Type": ""A"",
+                    "Name": "'$recordname'",
+                    "Type": "A",
                     "TTL": 1,
                     "ResourceRecords": [
                     {
