@@ -3,7 +3,7 @@
 SG_ID="sg-059bc57f32dfd1979"
 AMI_ID="ami-0220d79f3f480ecf5"
 
-for INSTANCE IN $@
+for instance in $@
 do
     instance_id = $( 
         aws ec2 run-instances \
