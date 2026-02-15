@@ -40,7 +40,7 @@ do
 #update route53
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
-    --change-batch "
+    --change-batch '
         {
         "Comment": "Updating the A record for my EC2 instance",
         "Changes": [
@@ -60,6 +60,6 @@ do
             ]
             }
 
-        "
+        '
         echo "" record iupdated for $i
 done
