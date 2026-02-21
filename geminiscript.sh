@@ -1,75 +1,63 @@
 #!/bin/bash
 
-SG_ID="sg-0c6160bb88a682e78"
+SG_ID="sg-0c6160bb88a682e78" # replace with your ID
 AMI_ID="ami-0220d79f3f480ecf5"
-ZONE_ID="Z015439937GBQIS91RBN2"
-DOMAIN_NAME="karegowdra.com"
+ZONE_ID="Z05013202FKF0ZL12WAOP"
+DOMAIN_NAME="daws88s.online"
 
-# Using 'i' for the loop variable to keep it simple
-for i in $@
+for instance in $@
 do
-    echo "DEBUG: SG_ID is $SG_ID"
-    echo "DEBUG: AMI_ID is $AMI_ID"
-    echo "Creating instance for: $i"
+    INSTANCE_ID=$( aws ec2 run-instances \
+    --image-id $AMI_ID \
+    --instance-type "t3.micro" \
+    --security-group-ids $SG_ID \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
+    --query 'Instances[0].InstanceId' \
+    --output text )
 
-    # 1. No spaces around '='. Fixed Query string.
-    INSTANCE_ID=$(aws ec2 run-instances \
-        --image-id "$AMI_ID" \
-        --security-group-ids "$SG_ID" \
-        --instance-type "t3.micro" \
-        --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" \
-        --query 'Instances[0].InstanceId' \
-        --output text)
-
-        # If Instance creation fails, stop the script for this item
-        if [ -z "$INSTANCE_ID" ] || [ "$INSTANCE_ID" == "None" ]; then
-            echo "Error: Instance creation failed for $i"
-            continue
-        fi
-
-    echo "Instance Created: $INSTANCE_ID"
-
-    # 2. Logic to get Public or Private IP
-    if [ "$i" == "frontend" ]; then 
-        IP=$(aws ec2 describe-instances \
-            --instance-ids "$INSTANCE_ID" \
-            --query 'Reservations[0].Instances[0].PublicIpAddress' \
-            --output text)
-            RECORD_NAME="$DOMAIN_NAME"
-    else 
-        IP=$(aws ec2 describe-instances \
-            --instance-ids "$INSTANCE_ID" \
-            --query 'Reservations[0].Instances[0].PrivateIpAddress' \
-            --output text)
-            RECORD_NAME="$instance.$DOMAIN_NAME"
+    if [ $instance == "frontend" ]; then
+        IP=$(
+            aws ec2 describe-instances \
+            --instance-ids $INSTANCE_ID \
+            --query 'Reservations[].Instances[].PublicIpAddress' \
+            --output text
+        )
+        RECORD_NAME="$DOMAIN_NAME" # daws88s.online
+    else
+        IP=$(
+            aws ec2 describe-instances \
+            --instance-ids $INSTANCE_ID \
+            --query 'Reservations[].Instances[].PrivateIpAddress' \
+            --output text
+        )
+        RECORD_NAME="$instance.$DOMAIN_NAME" # mongodb.daws88s.online
     fi
-     
-    echo "IP Address for $i: $IP"
-#update route53
+
+    echo "IP Address: $IP"
+
     aws route53 change-resource-record-sets \
-    --hosted-zone-id  $ZONE_ID \
-    --change-batch '
-                       aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
     --change-batch '
-        {
-            "Comment": "Updating record",
-            "Changes": [
-                            {
-                            "Action": "UPSERT",
-                            "ResourceRecordSet": {
-                                "Name": "'$RECORD_NAME'",
-                                "Type": "A",
-                                "TTL": 1,
-                                "ResourceRecords": [
-                                {
-                                    "Value": "'$IP'"
-                                }
-                                ]
-                            }
-                
-            ]
-        }
+    {
+        "Comment": "Updating record",
+        "Changes": [
+            {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "'$RECORD_NAME'",
+                "Type": "A",
+                "TTL": 1,
+                "ResourceRecords": [
+                {
+                    "Value": "'$IP'"
+                }
+                ]
+            }
+            }
+        ]
+    }
     '
- echo " record updated for $i "
+
+    echo "record updated for $instance"
+
 done
