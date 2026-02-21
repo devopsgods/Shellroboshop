@@ -48,7 +48,7 @@ do
 #update route53
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
-    --change-batch '
+    --change-batch='
                                 # STEP 1: Create the JSON file (This happens first)
                             cat <<EOF > /tmp/route53.json
                         {
