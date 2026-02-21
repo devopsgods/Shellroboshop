@@ -49,13 +49,14 @@ do
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
     --change-batch '
+        cat <<EOF > /tmp/route53.json
         {
         "Comment": "Updating the A record for my EC2 instance",
         "Changes": [
             {
                     "Action": "UPSERT",
                     "ResourceRecordSet": {
-                    "Name": "'$RECORD_NAME'",
+                    "Name": "'"$i.$DOMAIN_NAME"'",
                     "Type": "A",
                     "TTL": 1,
                     "ResourceRecords": [
