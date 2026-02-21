@@ -53,7 +53,11 @@ VALIDATE $? "Downloading catalogue code"
 cd /app
 VALIDATE $? "moving to app directory"
 
+unzip /tmp/catalogue.zip
+VALIDATE $? "unzip catalogue code"
+
 cp /home/ec2-user/Shellroboshop/catalogue.service /etc/systemd/system/catalogue.service
+VALIDATE $? "created systemctl service"
 
 systemctl daemon-reload
 systemctl enable catalogue
