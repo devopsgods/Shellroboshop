@@ -25,15 +25,15 @@ do
     if [ "$i" == "frontend" ]; then 
         IP=$(aws ec2 describe-instances \
             --instance-ids "$INSTANCE_ID" \
-            --query 'Reservations[0].Instances[0].PublicIpAddress' \
+            --query 'Reservations[].Instances[].PublicIpAddress' \
             --output text)
-            recordname="$DOMAIN_NAME"
+            RECORD_NAME="$DOMAIN_NAME"
     else 
         IP=$(aws ec2 describe-instances \
             --instance-ids "$INSTANCE_ID" \
-            --query 'Reservations[0].Instances[0].PrivateIpAddress' \
+            --query 'Reservations[].Instances[].PrivateIpAddress' \
             --output text)
-            recordname="$instance.$DOMAIN_NAME"
+            RECORD_NAME="$instance.$DOMAIN_NAME"
     fi
      
     echo "IP Address for $i: $IP"
@@ -47,12 +47,12 @@ do
             {
                     "Action": "UPSERT",
                     "ResourceRecordSet": {
-                    "Name": "'$recordname'",
+                    "Name": "'$RECORD_NAME'",
                     "Type": "A",
                     "TTL": 1,
                     "ResourceRecords": [
                     {
-                        "Value": "'172.31.22.151'"
+                        "Value": "'$IP'"
                     }
                     ]
                 }
