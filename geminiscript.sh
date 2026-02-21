@@ -8,6 +8,8 @@ DOMAIN_NAME="karegowdra.com"
 # Using 'i' for the loop variable to keep it simple
 for i in $@
 do
+    echo "DEBUG: SG_ID is $SG_ID"
+    echo "DEBUG: AMI_ID is $AMI_ID"
     echo "Creating instance for: $i"
 
     # 1. No spaces around '='. Fixed Query string.
@@ -18,6 +20,12 @@ do
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" \
         --query 'Instances[0].InstanceId' \
         --output text)
+
+        # If Instance creation fails, stop the script for this item
+        if [ -z "$INSTANCE_ID" ] || [ "$INSTANCE_ID" == "None" ]; then
+            echo "Error: Instance creation failed for $i"
+            continue
+        fi
 
     echo "Instance Created: $INSTANCE_ID"
 
