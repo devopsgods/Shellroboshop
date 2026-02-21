@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SG_ID="sg-059bc57f32dfd197"
+SG_ID="sg-059bc57f32dfd1978"
 AMI_ID="ami-0220d79f3f480ecf5"
 ZONE_ID="Z015439937GBQIS91RBN2"
 DOMAIN_NAME="karegowdra.com"
