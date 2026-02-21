@@ -2,7 +2,7 @@
 
 SG_ID="sg-0c6160bb88a682e78" # replace with your ID
 AMI_ID="ami-0220d79f3f480ecf5"
-ZONE_ID="Z0Z015439937GBQIS91RBN2"
+ZONE_ID="Z015439937GBQIS91RBN2"
 DOMAIN_NAME="karegowdra.com"
 
 for instance in $@
