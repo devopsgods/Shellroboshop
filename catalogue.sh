@@ -36,8 +36,8 @@ VALIDATE $? "ENABLING NODEJS:20"
 dnf install nodejs -y &>>$LOGS_FILE
 VALIDATE $? "installing nodejs"
 
-id roboshop &>>LOGS_FILE
-if [$? -ne 0 ]; then
+id roboshop &>>$LOGS_FILE
+if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOGS_FILE
     VALIDATE $? "Creating system user"
 else
@@ -49,3 +49,12 @@ VALIDATE $? "creating system user"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOGS_FILE
 VALIDATE $? "Downloading catalogue code"
+
+cd /app
+VALIDATE $? "moving to app directory"
+
+systemctl daemon-reload
+systemctl enable catalogue
+systemctl start catalogue
+VALIDATE $? "starting and running catalogue"
+
