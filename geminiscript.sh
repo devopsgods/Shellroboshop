@@ -67,9 +67,8 @@ do
                                 }
                                 ]
                             }
-                }
+                
             ]
-        }
         }
     '
  echo " record updated for $i "
