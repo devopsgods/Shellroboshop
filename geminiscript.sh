@@ -49,7 +49,6 @@ do
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
     --change-batch='
-                                # STEP 1: Create the JSON file (This happens first)
                             cat <<EOF > /tmp/route53.json
                         {
                             "Comment": "Updating the A record for $i",
@@ -70,9 +69,6 @@ do
                             ]
                         }
                         EOF
-
-                            # STEP 2: Tell AWS to use that file
-                            # This is a separate command, not part of the cat block
                             aws route53 change-resource-record-sets \
                                 --hosted-zone-id "$ZONE_ID" \
                                 --change-batch "file:///tmp/route53.json"
