@@ -5,6 +5,8 @@ TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGS_FILE="/tmp/$0-$TIMESTAMP.log"
 LOGS_FOLDER="/var/log/Shellroboshop"
 LOGS_FILES="$LOGS_FOLDER/0.log"
+SCRIPT_DIR=$PWD
+MONGODB_HOST=mongodb.karegowdra.com
 
 R="\e[31m"
 G="\e[32m"
@@ -53,8 +55,13 @@ VALIDATE $? "Downloading catalogue code"
 cd /app
 VALIDATE $? "moving to app directory"
 
+rm -rf /app/*
+VALIDATE $? "removing existing code"
+
 unzip /tmp/catalogue.zip
 VALIDATE $? "unzip catalogue code"
+
+npm install &>> $LOGS_FILE 
 
 cp /home/ec2-user/Shellroboshop/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "created systemctl service"
@@ -63,4 +70,9 @@ systemctl daemon-reload
 systemctl enable catalogue
 systemctl start catalogue
 VALIDATE $? "starting and running catalogue"
+
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
+dnf install mongobd.mongosh -y
+
+mongosh --host $MONGODB_HOST </app/db/master-data.js
 
