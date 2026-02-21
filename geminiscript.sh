@@ -49,26 +49,35 @@ do
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
     --change-batch '
-        cat <<EOF > /tmp/route53.json
-        {
-        "Comment": "Updating the A record for my EC2 instance",
-        "Changes": [
-            {
-                    "Action": "UPSERT",
-                    "ResourceRecordSet": {
-                    "Name": "'"$i.$DOMAIN_NAME"'",
-                    "Type": "A",
-                    "TTL": 1,
-                    "ResourceRecords": [
-                    {
-                        "Value": "'$IP'"
-                    }
-                    ]
-                }
-                }
-            ]
-            }
+                                # STEP 1: Create the JSON file (This happens first)
+                            cat <<EOF > /tmp/route53.json
+                        {
+                            "Comment": "Updating the A record for $i",
+                            "Changes": [
+                                {
+                                    "Action": "UPSERT",
+                                    "ResourceRecordSet": {
+                                        "Name": "$i.$DOMAIN_NAME",
+                                        "Type": "A",
+                                        "TTL": 1,
+                                        "ResourceRecords": [
+                                            {
+                                                "Value": "$IP"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                        EOF
 
-        '
-        echo "" record iupdated for $i
+                            # STEP 2: Tell AWS to use that file
+                            # This is a separate command, not part of the cat block
+                            aws route53 change-resource-record-sets \
+                                --hosted-zone-id "$ZONE_ID" \
+                                --change-batch "file:///tmp/route53.json"
+
+                            echo "Record updated for: $i.$DOMAIN_NAME" 
+                     '
+        echo "" record updated for $i
 done
