@@ -48,32 +48,28 @@ do
 #update route53
     aws route53 change-resource-record-sets \
     --hosted-zone-id  $ZONE_ID \
-    --change-batch='
-                            cat <<EOF > /tmp/route53.json
-                        {
-                            "Comment": "Updating the A record for $i",
-                            "Changes": [
+    --change-batch '
+                       aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
+    --change-batch '
+        {
+            "Comment": "Updating record",
+            "Changes": [
+                            {
+                            "Action": "UPSERT",
+                            "ResourceRecordSet": {
+                                "Name": "'$RECORD_NAME'",
+                                "Type": "A",
+                                "TTL": 1,
+                                "ResourceRecords": [
                                 {
-                                    "Action": "UPSERT",
-                                    "ResourceRecordSet": {
-                                        "Name": "$i.$DOMAIN_NAME",
-                                        "Type": "A",
-                                        "TTL": 1,
-                                        "ResourceRecords": [
-                                            {
-                                                "Value": "$IP"
-                                            }
-                                        ]
-                                    }
+                                    "Value": "'$IP'"
                                 }
-                            ]
-                        }
-                        EOF
-                            aws route53 change-resource-record-sets \
-                                --hosted-zone-id "$ZONE_ID" \
-                                --change-batch "file:///tmp/route53.json"
-
-                            echo "Record updated for: $i.$DOMAIN_NAME" 
-                     '
-        echo "" record updated for $i
+                                ]
+                            }
+                }
+            ]
+        }
+    '
+ echo " record updated for $i "
 done
