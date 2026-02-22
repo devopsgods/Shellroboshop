@@ -10,6 +10,8 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+SCRIPT_DIR=$PWD
+MONGODB_HOST=mongodb.daws88s.online
 
 if [ $USER_ID -ne 0 ]; then
     echo -e "$R run with root user access $N" | tee -a $LOGS_FILES
