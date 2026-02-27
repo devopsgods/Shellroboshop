@@ -63,7 +63,7 @@ VALIDATE $? "unzip cart code"
 
 npm install &>> $LOGS_FILE 
 
-cp /home/ec2-user/Shellroboshop/cart.service /etc/systemd/system/cart.service
+cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service
 VALIDATE $? "created systemctl service"
 
 systemctl daemon-reload

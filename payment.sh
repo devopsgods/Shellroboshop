@@ -12,7 +12,7 @@ Y="\e[33m"
 N="\e[0m"
 
 SCRIPT_DIR=$PWD
-MYSQL_HOST=mysql.karegegowdra.com
+MYSQL_HOST=mysql.karegowdra.com
 
 if [ $USER_ID -ne 0 ]; then
     echo -e "$R run with root user access $N" | tee -a $LOGS_FILES
@@ -46,6 +46,15 @@ VALIDATE $? "Creating app directory"
 
 curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip  &>>$LOGS_FILE
 VALIDATE $? "Downloading payment code"
+
+cd /app
+VALIDATE $? "Moving to app directory"
+
+rm -rf /app/*
+VALIDATE $? "Removing existing code"
+
+unzip /tmp/payment.zip &>>$LOGS_FILE
+VALIDATE $? "Uzip payment code"
 
 cd /app 
 pip3 install -r requirements.txt &>>$LOGS_FILE

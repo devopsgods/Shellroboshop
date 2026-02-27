@@ -33,7 +33,7 @@ dnf module disable nodejs -y &>>$LOGS_FILE
 VALIDATE $? "disablling previous nodejs"
 
 dnf module enable nodejs:20 -y &>>$LOGS_FILE
-VALIDATE $? "ENABLING NODEJS:20"
+VALIDATE $? "ENABLING NODEJS 20"
 
 dnf install nodejs -y &>>$LOGS_FILE
 VALIDATE $? "installing nodejs"
@@ -63,7 +63,7 @@ VALIDATE $? "unzip catalogue code"
 
 npm install &>> $LOGS_FILE 
 
-cp /home/ec2-user/Shellroboshop/catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR /catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "created systemctl service"
 
 systemctl daemon-reload

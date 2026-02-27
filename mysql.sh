@@ -5,8 +5,6 @@ TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGS_FILE="/tmp/$0-$TIMESTAMP.log"
 LOGS_FOLDER="/var/log/Shellroboshop"
 LOGS_FILES="$LOGS_FOLDER/0.log"
-SCRIPT_DIR=$PWD
-MONGODB_HOST=mongodb.karegowdra.com
 
 R="\e[31m"
 G="\e[32m"

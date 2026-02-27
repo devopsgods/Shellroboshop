@@ -12,7 +12,7 @@ Y="\e[33m"
 N="\e[0m"
 
 SCRIPT_DIR=$PWD
-MYSQL_HOST=mysql.karegegowdra.com
+MONGODB_HOST=mongodb.karegowdra.com
 
 if [ $USER_ID -ne 0 ]; then
     echo -e "$R run with root user access $N" | tee -a $LOGS_FILES

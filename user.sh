@@ -11,7 +11,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
-MONGODB_HOST=mongodb.daws88s.online
+MONGODB_HOST=mongodb.karegowdra.online
 
 if [ $USER_ID -ne 0 ]; then
     echo -e "$R run with root user access $N" | tee -a $LOGS_FILES
@@ -63,7 +63,7 @@ VALIDATE $? "unzip user code"
 
 npm install &>> $LOGS_FILE 
 
-cp /home/ec2-user/Shellroboshop/user.service /etc/systemd/system/user.service
+cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
 VALIDATE $? "created systemctl service"
 
 systemctl daemon-reload
