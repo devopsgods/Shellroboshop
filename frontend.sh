@@ -47,11 +47,11 @@ cd /usr/share/nginx/html
 unzip /tmp/frontend.zip &>>$LOGS_FILE
 VALIDATE $? "Downloaded and unzipped frontend"
 
-rm -rf /etc/ngnix/ngnix.conf 
+rm -rf /etc/nginx/nginx.conf 
 
-cp $SCRIPT_DIR /nginx.conf /etc/nginx/ngnix.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "replaced ngnic conf file"
 
-systemctl restart ngnix
+systemctl restart nginx
 VALIDATE $? "restart Ngnix"
 
