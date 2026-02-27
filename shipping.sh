@@ -69,8 +69,6 @@ VALIDATE $? "Created systemctl service"
 dnf install mysql -y  &>>$LOGS_FILE
 VALIDATE $? "Installing MySQL"
 
-sdnf install mysql -y  &>>$LOGS_FILE
-VALIDATE $? "Installing MySQL"
 
 mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities'
 if [ $? -ne 0 ]; then
