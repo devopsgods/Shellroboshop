@@ -49,7 +49,7 @@ VALIDATE $? "Downloaded and unzipped frontend"
 
 rm -rf /etc/ngnix/ngnix.conf 
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/ngnix.conf
+cp $SCRIPT_DIR /nginx.conf /etc/nginx/ngnix.conf
 VALIDATE $? "replaced ngnic conf file"
 
 systemctl restart ngnix
